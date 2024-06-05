@@ -7,18 +7,29 @@ import (
 	"path/filepath"
 	"time"
 
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 )
 
 func main() {
 	// Enabling the release mode
-	gin.SetMode(gin.ReleaseMode)
+	// gin.SetMode(gin.ReleaseMode)
 
 	// Setting the port
 	port := 8888
 	formattedPort := fmt.Sprintf(":%d", port)
 
 	router := gin.Default()
+
+	// Configure CORS middleware
+	router.Use(cors.New(cors.Config{
+		AllowOrigins:     []string{"http://localhost:3000"},  // Replace with your allowed domains
+		AllowMethods:     []string{"GET", "POST"},            // HTTP methods to allow
+		AllowHeaders:     []string{"Origin", "Content-Type"}, // Headers to allow
+		ExposeHeaders:    []string{"Content-Length"},
+		AllowCredentials: true,
+		MaxAge:           12 * time.Hour,
+	}))
 
 	// Struct to represent the response
 	type ImgURL struct {
